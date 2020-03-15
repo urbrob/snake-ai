@@ -1,5 +1,7 @@
 import tkinter as tk
 from PIL import Image, ImageTk
+from canvas_objects import SnakePartObject, FoodObject
+
 
 class Snake(tk.Canvas):
     def __init__(self):
@@ -9,21 +11,15 @@ class Snake(tk.Canvas):
             background="black",
             highlightthickness=0
         )
-        self.snake_positions = [(100, 100), (80, 100), (60, 100)]
-        self.food_position = (200, 200)
+        self.snake_head = SnakeObject(100, 60)
+        self.food_position = FoodObject(200, 200)
         self.score = 0
-        self._load_assets()
-        self.create_objects()
 
-    def _load_assets(self):
-        self.snake_body_image = Image.open("/assets/snake.png")
-        self.snake_body = ImageTk.PhotoImage(self.snake_body_image)
-        self.food_image = Image.open("/assets/food.png")
-        self.food = ImageTk.PhotoImage(self.food_image)
+        self.create_game_objects()
 
-    def create_objects(self):
-        for x, y in self.snake_positions:
-            self.create_image(x, y image=self.snake_body)
+    def create_game_objects(self):
+        self.food_position.draw_object_on_canvas(self)
+        self.snake_head.draw_object_on_canvas(self)
 
 
 class App:
@@ -35,7 +31,7 @@ class App:
     def _set_canvas(self, canvas):
         """Setting about main board on which all the magic happens."""
         self.board = canvas
-        self.pack()
+        self.board.pack()
 
     def start(self):
         """Prepare everything and start a game."""
