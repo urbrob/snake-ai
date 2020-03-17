@@ -1,6 +1,6 @@
 import tkinter as tk
 from PIL import Image, ImageTk
-from canvas_objects import SnakePartObject, FoodObject
+from canvas_objects import SnakePartObject, FoodObject, SnakeObject
 
 
 class Snake(tk.Canvas):
@@ -11,15 +11,16 @@ class Snake(tk.Canvas):
             background="black",
             highlightthickness=0
         )
-        self.snake_head = SnakeObject(100, 60)
+        self.snake_head = SnakeObject(100, 100)
         self.food_position = FoodObject(200, 200)
         self.score = 0
-
         self.create_game_objects()
 
     def create_game_objects(self):
+        self.create_text(45, 12, text=f"Score : {self.score}", tag="Score", fill="#fff", font=("TkDefaultFont", 14))
         self.food_position.draw_object_on_canvas(self)
         self.snake_head.draw_object_on_canvas(self)
+        self.create_rectangle(7, 27, 593, 613, outline="#525d69")
 
 
 class App:
