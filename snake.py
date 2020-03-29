@@ -12,40 +12,47 @@ class Snake(tk.Canvas):
         "w": (0, -MOVE_INCREMENT),
         "s": (0, MOVE_INCREMENT),
         "a": (-MOVE_INCREMENT, 0),
-        "d": (MOVE_INCREMENT, 0)
+        "d": (MOVE_INCREMENT, 0),
     }
 
     def __init__(self):
         super().__init__(
-            width=600,
-            height=620,
-            background="black",
-            highlightthickness=0
+            width=600, height=620, background="black", highlightthickness=0
         )
         self.snake = SnakeObject(100, 100)
         self.food_position = FoodObject(200, 200)
         self.score = 0
-        self.create_game_objects()
+        self.__create_game_objects()
+        self.perform_actions()
 
-    def create_game_objects(self):
-        self.create_text(45, 12, text=f"Score : {self.score}", tag="Score", fill="#fff", font=("TkDefaultFont", 14))
+    def __create_game_objects(self):
+        """Creates initial game objects like snake and food."""
+        self.create_text(
+            45,
+            12,
+            text=f"Score : {self.score}",
+            tag="Score",
+            fill="#fff",
+            font=("TkDefaultFont", 14),
+        )
         self.food_position.draw_object_on_canvas(self)
         self.snake.draw_object_on_canvas(self)
         self.create_rectangle(7, 27, 593, 613, outline="#525d69")
 
     def update_canvas_objects_coordinates(self, canvas_object: list):
+        """Updates every given canvas object at canvas board with their current x/y position."""
         for obj in canvas_object:
             self.coords(obj.canvas_id, obj.coordinates)
 
     def move_snake(self, direction: str):
+        """Perform_snake movement based on w/s/d/a input."""
         move_coordinates = self.MOVE_DIRECTIONS[direction]
         self.snake.move(move_coordinates)
-        self.update_canvas_objects_coordinates(self.snake.body_parts)
+        self.update_canvas_objects_coordinates([self.snake.body_parts[0]])
 
     def perform_actions(self):
-        self.move_snake("d")
+        self.move_snake("w")
         self.after(self.GAME_SPEED, self.perform_actions)
-
 
 
 class App:
@@ -61,11 +68,10 @@ class App:
 
     def start(self):
         """Prepare everything and start a game."""
-        snake = Snake()
-        self._set_canvas(snake)
-        snake.perform_actions()
+        self._set_canvas(Snake())
         self.root.mainloop()
 
-if __name__ =="__main__":
+
+if __name__ == "__main__":
     my_app = App()
     my_app.start()
