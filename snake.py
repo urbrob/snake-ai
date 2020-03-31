@@ -9,10 +9,10 @@ class Snake(tk.Canvas):
     MOVES_PER_SECOND = 15
     GAME_SPEED = 1000 // 15
     MOVE_DIRECTIONS = {
-        "Up": (0, -MOVE_INCREMENT),
-        "Down": (0, MOVE_INCREMENT),
-        "Left": (-MOVE_INCREMENT, 0),
-        "Right": (MOVE_INCREMENT, 0),
+        "w": (0, -MOVE_INCREMENT),
+        "s": (0, MOVE_INCREMENT),
+        "a": (-MOVE_INCREMENT, 0),
+        "d": (MOVE_INCREMENT, 0),
     }
 
     def __init__(self):
@@ -22,8 +22,8 @@ class Snake(tk.Canvas):
         self.snake = SnakeObject(100, 100)
         self.food_position = FoodObject(200, 200)
         self.score = 0
-        self.current_direction = "Right"
-        self.bind_all("<key>", self.on_key_press)
+        self.current_direction = "d"
+        self.bind_all("<Key>", self.on_key_press)
         self.__create_game_objects()
         self.perform_actions()
 
@@ -64,7 +64,7 @@ class Snake(tk.Canvas):
 
     def on_key_press(self, e):
         new_direction = e.keysym
-        self.direction = new_direction
+        self.current_direction = new_direction
 
     def perform_actions(self):
         self.move_snake(self.current_direction)
