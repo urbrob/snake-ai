@@ -1,4 +1,5 @@
 from PIL import Image, ImageTk
+from random import randint
 
 
 class AbstarctCanvasObject:
@@ -38,6 +39,13 @@ class AbstarctCanvasObject:
 class FoodObject(AbstarctCanvasObject):
     image = Image.open("./assets/food.png")
     tag = "food"
+    POSSIBLE_POSITIONS = list(range(40, 601, 20))
+    POSITION_COUNT = len(POSSIBLE_POSITIONS) - 1
+
+    def respawn(self):
+        """Randomize coordinates of fruit."""
+        self.x = self.POSSIBLE_POSITIONS[randint(0, self.POSITION_COUNT)]
+        self.y = self.POSSIBLE_POSITIONS[randint(0, self.POSITION_COUNT)]
 
 
 class SnakePartObject(AbstarctCanvasObject):
@@ -68,3 +76,7 @@ class SnakeObject:
         y_cord = self.body_parts[0].y + coordinates[1]
         last_part_of_body.move(x_cord, y_cord)
         self.body_parts.insert(0, last_part_of_body)
+
+    @property
+    def head_coords(self):
+        return self.body_parts[0].x, self.body_parts[0].y

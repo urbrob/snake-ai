@@ -29,7 +29,7 @@ class Snake(tk.Canvas):
 
     def __create_game_objects(self):
         """Creates initial game objects like snake and food."""
-        self.create_text(
+        self.score_canvas = self.create_text(
             45,
             12,
             text=f"Score : {self.score}",
@@ -54,22 +54,36 @@ class Snake(tk.Canvas):
 
     def check_snake_collision_with_wall(self):
         """Return if snake is out of the bounds."""
-        x_cord, y_cord = self.snake.body_parts[0].coordinates
+        x_cord, y_cord = self.snake.head_coords
         return x_cord in (0, 600) or y_cord in (20, 620)
 
     def check_if_snake_ate_himself(self):
         """Retrun if snake ate himself."""
-        x_cord, y_cord = self.snake.body_parts[0].coordinates
+        x_cord, y_cord = self.snake.head_coords
         return any((x_cord, y_cord) in body_part.coordinates for body_part in self.snake.body_parts[1:])
 
     def on_key_press(self, e):
+        """Event listener on every key pressed."""
         new_direction = e.keysym
         self.current_direction = new_direction
+
+    def check_collision_with_fruit(self):
+        """Check if snake jumped on fruit."""
+        return self.snake.head_coords == self.food_position.coordinates
+
+    def eat_fruit(self):
+        """Make increase score and add respawn food in a new place."""
+        self.score += 1
+        self.itemconfigure(self.score_canvas, text=f"Score : {self.score}")
+        self.food_position.respawn()
+        self.update_canvas_objects_coordinates([self.food_position])
 
     def perform_actions(self):
         self.move_snake(self.current_direction)
         if self.check_snake_collision_with_wall() or self.check_if_snake_ate_himself():
             return
+        if self.check_collision_with_fruit():
+            self.eat_fruit()
         self.after(self.GAME_SPEED, self.perform_actions)
 
 
