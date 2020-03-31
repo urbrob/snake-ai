@@ -77,6 +77,11 @@ class SnakeObject:
         last_part_of_body.move(x_cord, y_cord)
         self.body_parts.insert(0, last_part_of_body)
 
+    def grow(self, canvas):
+        new_part = SnakePartObject(*self.body_parts[-1].coordinates)
+        new_part.draw_object_on_canvas(canvas)
+        self.body_parts.append(new_part)
+
     @property
     def head_coords(self):
         return self.body_parts[0].x, self.body_parts[0].y

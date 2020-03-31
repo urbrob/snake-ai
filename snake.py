@@ -84,6 +84,7 @@ class Snake(tk.Canvas):
             return
         if self.check_collision_with_fruit():
             self.eat_fruit()
+            self.snake.grow(self)
         self.after(self.GAME_SPEED, self.perform_actions)
 
 
