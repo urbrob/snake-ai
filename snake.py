@@ -9,10 +9,10 @@ class Snake(tk.Canvas):
     MOVES_PER_SECOND = 15
     GAME_SPEED = 1000 // 15
     MOVE_DIRECTIONS = {
-        "w": (0, -MOVE_INCREMENT),
-        "s": (0, MOVE_INCREMENT),
-        "a": (-MOVE_INCREMENT, 0),
-        "d": (MOVE_INCREMENT, 0),
+        "Up": (0, -MOVE_INCREMENT),
+        "Down": (0, MOVE_INCREMENT),
+        "Left": (-MOVE_INCREMENT, 0),
+        "Right": (MOVE_INCREMENT, 0),
     }
 
     def __init__(self):
@@ -22,6 +22,8 @@ class Snake(tk.Canvas):
         self.snake = SnakeObject(100, 100)
         self.food_position = FoodObject(200, 200)
         self.score = 0
+        self.current_direction = "Right"
+        self.bind_all("<key>", self.on_key_press)
         self.__create_game_objects()
         self.perform_actions()
 
@@ -50,8 +52,24 @@ class Snake(tk.Canvas):
         self.snake.move(move_coordinates)
         self.update_canvas_objects_coordinates([self.snake.body_parts[0]])
 
+    def check_snake_collision_with_wall(self):
+        """Return if snake is out of the bounds."""
+        x_cord, y_cord = self.snake.body_parts[0].coordinates
+        return x_cord in (0, 600) or y_cord in (20, 620)
+
+    def check_if_snake_ate_himself(self):
+        """Retrun if snake ate himself."""
+        x_cord, y_cord = self.snake.body_parts[0].coordinates
+        return any((x_cord, y_cord) in body_part.coordinates for body_part in self.snake.body_parts[1:])
+
+    def on_key_press(self, e):
+        new_direction = e.keysym
+        self.direction = new_direction
+
     def perform_actions(self):
-        self.move_snake("w")
+        self.move_snake(self.current_direction)
+        if self.check_snake_collision_with_wall() or self.check_if_snake_ate_himself():
+            return
         self.after(self.GAME_SPEED, self.perform_actions)
 
 
