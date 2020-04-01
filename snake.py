@@ -6,8 +6,8 @@ from canvas_objects import SnakePartObject, FoodObject, SnakeObject
 
 class Snake(tk.Canvas):
     MOVE_INCREMENT = 20
-    MOVES_PER_SECOND = 15
-    GAME_SPEED = 1000 // 15
+    MOVES_PER_SECOND = 10
+    GAME_SPEED = 1000 // MOVES_PER_SECOND
     MOVE_DIRECTIONS = {
         "w": (0, -MOVE_INCREMENT),
         "s": (0, MOVE_INCREMENT),
@@ -66,7 +66,7 @@ class Snake(tk.Canvas):
     def check_if_snake_ate_himself(self):
         """Retrun if snake ate himself."""
         x_cord, y_cord = self.snake.head_coords
-        return any((x_cord, y_cord) in body_part.coordinates for body_part in self.snake.body_parts[1:])
+        return any((x_cord, y_cord) == body_part.coordinates for body_part in self.snake.body_parts[1:])
 
     def on_key_press(self, e):
         """Event listener on every key pressed."""
