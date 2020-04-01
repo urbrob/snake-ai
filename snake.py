@@ -14,6 +14,12 @@ class Snake(tk.Canvas):
         "a": (-MOVE_INCREMENT, 0),
         "d": (MOVE_INCREMENT, 0),
     }
+    BANNED_CHANGE_DIRECTIONS = {
+        "w": "s",
+        "s": "w",
+        "a": "d",
+        "d": "a"
+    }
 
     def __init__(self):
         super().__init__(
@@ -65,7 +71,8 @@ class Snake(tk.Canvas):
     def on_key_press(self, e):
         """Event listener on every key pressed."""
         new_direction = e.keysym
-        self.current_direction = new_direction
+        if new_direction != self.BANNED_CHANGE_DIRECTIONS[self.current_direction]:
+            self.current_direction = new_direction
 
     def check_collision_with_fruit(self):
         """Check if snake jumped on fruit."""
@@ -82,7 +89,7 @@ class Snake(tk.Canvas):
         self.move_snake(self.current_direction)
         if self.check_snake_collision_with_wall() or self.check_if_snake_ate_himself():
             return
-        if self.check_collision_with_fruit():
+        elif self.check_collision_with_fruit():
             self.eat_fruit()
             self.snake.grow(self)
         self.after(self.GAME_SPEED, self.perform_actions)
