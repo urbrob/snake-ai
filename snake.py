@@ -2,6 +2,7 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from time import sleep
 from canvas_objects import SnakePartObject, FoodObject, SnakeObject
+from ai_tools import commit_moves, prepare_move
 
 
 class Snake(tk.Canvas):
@@ -21,7 +22,7 @@ class Snake(tk.Canvas):
         "d": "a"
     }
 
-    def __init__(self):
+    def __init__(self, game_mode=0):
         super().__init__(
             width=600, height=620, background="black", highlightthickness=0
         )
@@ -31,7 +32,10 @@ class Snake(tk.Canvas):
         self.current_direction = "d"
         self.bind_all("<Key>", self.on_key_press)
         self.__create_game_objects()
+        self.game_mode = game_mode
+        self.move_memory = []
         self.perform_actions()
+
 
     def __create_game_objects(self):
         """Creates initial game objects like snake and food."""
@@ -92,14 +96,19 @@ class Snake(tk.Canvas):
         elif self.check_collision_with_fruit():
             self.eat_fruit()
             self.snake.grow(self)
+            if self.game_mode == 1:
+                commit_moves(self.move_memory)
+        if self.game_mode == 1:
+            self.move_memory.append(prepare_move(self.food_position, self.snake, self.current_direction))
         self.after(self.GAME_SPEED, self.perform_actions)
 
 
 class App:
-    def __init__(self):
+    def __init__(self, mode=0):
         self.root = tk.Tk()
         self.root.title("Snake")
         self.root.resizable(False, False)
+        self.mode = mode
 
     def _set_canvas(self, canvas):
         """Setting about main board on which all the magic happens."""
@@ -108,7 +117,7 @@ class App:
 
     def start(self):
         """Prepare everything and start a game."""
-        self._set_canvas(Snake())
+        self._set_canvas(Snake(game_mode=self.mode))
         self.root.mainloop()
 
 
