@@ -22,7 +22,7 @@ class Snake(tk.Canvas):
         "d": "a"
     }
 
-    def __init__(self, game_mode=0):
+    def __init__(self, root, game_mode=0):
         super().__init__(
             width=600, height=620, background="black", highlightthickness=0
         )
@@ -34,7 +34,7 @@ class Snake(tk.Canvas):
         self.__create_game_objects()
         self.game_mode = game_mode
         self.move_memory = []
-        self.perform_actions()
+        self.perform_actions(root)
 
 
     def __create_game_objects(self):
@@ -89,9 +89,10 @@ class Snake(tk.Canvas):
         self.food_position.respawn()
         self.update_canvas_objects_coordinates([self.food_position])
 
-    def perform_actions(self):
-        self.move_snake(self.current_direction if self.game_mode != 2 else predict_move(prepare_move))
+    def perform_actions(self, root):
+        self.move_snake(self.current_direction if self.game_mode != 2 else predict_move(prepare_move(self.food_position, self.snake, self.current_direction)))
         if self.check_snake_collision_with_wall() or self.check_if_snake_ate_himself():
+            root.destroy()
             return
         elif self.check_collision_with_fruit():
             self.eat_fruit()
@@ -101,7 +102,7 @@ class Snake(tk.Canvas):
                 self.move_memory = []
         if self.game_mode == 1:
             self.move_memory.append(prepare_move(self.food_position, self.snake, self.current_direction, to_save=True))
-        self.after(self.GAME_SPEED, self.perform_actions)
+        self.after(self.GAME_SPEED, lambda :self.perform_actions(root))
 
 
 class App:
@@ -118,7 +119,7 @@ class App:
 
     def start(self):
         """Prepare everything and start a game."""
-        self._set_canvas(Snake(game_mode=self.mode))
+        self._set_canvas(Snake(self.root, game_mode=self.mode))
         self.root.mainloop()
 
 
