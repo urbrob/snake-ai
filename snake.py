@@ -2,7 +2,7 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from time import sleep
 from canvas_objects import SnakePartObject, FoodObject, SnakeObject
-from ai_tools import commit_moves, prepare_move
+from ai_tools import commit_moves, prepare_move, predict_move
 
 
 class Snake(tk.Canvas):
@@ -90,7 +90,7 @@ class Snake(tk.Canvas):
         self.update_canvas_objects_coordinates([self.food_position])
 
     def perform_actions(self):
-        self.move_snake(self.current_direction)
+        self.move_snake(self.current_direction if self.game_mode != 2 else predict_move(prepare_move))
         if self.check_snake_collision_with_wall() or self.check_if_snake_ate_himself():
             return
         elif self.check_collision_with_fruit():
@@ -98,8 +98,9 @@ class Snake(tk.Canvas):
             self.snake.grow(self)
             if self.game_mode == 1:
                 commit_moves(self.move_memory)
+                self.move_memory = []
         if self.game_mode == 1:
-            self.move_memory.append(prepare_move(self.food_position, self.snake, self.current_direction))
+            self.move_memory.append(prepare_move(self.food_position, self.snake, self.current_direction, to_save=True))
         self.after(self.GAME_SPEED, self.perform_actions)
 
 
