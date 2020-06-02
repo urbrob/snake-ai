@@ -11,7 +11,8 @@ class SnakeGameAbstract:
     def game_tick(self):
         self.before_move()
         next_move = self.get_next_move()
-        self.logic.run(next_move)
+        if self.logic.run(next_move):
+            exit()
         self.after_move()
 
     def after_move(self):
@@ -38,10 +39,12 @@ class CanvasSnakeGame(SnakeGameAbstract, SnakeBoardCanvas):
         self.init_game_logic(width, height, object_distance, game_speed)
 
     def after_move(self):
-        self.clear_canvas_objects()
+        self.draw_canvas_objects(self.logic.food_position, self.logic.snake.body_parts)
+        self.after(self.game_speed, self.game_tick)
 
     def before_move(self):
-        self.draw_canvas_objects(self.logic.food_position, self.logic.snake.body_parts)
+        self.clear_canvas_objects()
+
 
 class PlayerControlSnakeGame(CanvasSnakeGame):
     def __init__(self, width: int, height: int, object_distance: int, game_speed: int = 100):

@@ -5,12 +5,12 @@ from PIL import Image, ImageTk
 
 class CanvasObject(Coordinate2DObject):
     """Represents single object in canvas map."""
-    image = None
+    image_src = None
     tag = 'generic'
 
     def __init__(self, x, y):
         super().__init__(x, y)
-        self.canvas_image = ImageTk.PhotoImage(self.image)
+        self.canvas_image = ImageTk.PhotoImage(file=self.image_src)
 
     @property
     def draw_data(self) -> dict:
@@ -25,11 +25,11 @@ class CanvasObject(Coordinate2DObject):
 
 class FoodCanvasObject(CanvasObject):
     """Represents food object in canvas map"""
-    image = Image.open("./assets/food.png")
+    image_src = "./assets/food.png"
     tag = "food"
 
 
 class SnakeBodyCanvasObject(CanvasObject):
     """Represents body part object in canvas map"""
-    image = Image.open("./assets/snake.png")
+    image_src = "./assets/snake.png"
     tag = "snake"

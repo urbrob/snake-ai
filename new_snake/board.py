@@ -19,11 +19,12 @@ class SnakeBoardCanvas(tk.Canvas):
         self.current_objects = []
 
     def _draw_board(self) -> None:
+        margin = self.object_distance // 2 + self.object_distance
         self.create_rectangle(
-            self.object_distance,
-            self.object_distance,
-            (self.width // self.object_distance) * self.object_distance - self.object_distance,
-            (self.height // self.object_distance) * self.object_distance - self.object_distance,
+            margin,
+            margin,
+            (self.width // self.object_distance) * self.object_distance - margin,
+            (self.height // self.object_distance) * self.object_distance - margin,
             outline="#525d69"
         )
 
@@ -44,18 +45,17 @@ class SnakeBoardCanvas(tk.Canvas):
 
     def draw_canvas_object(self, canvas_object: CanvasObject) -> int:
         x, y, image, tag = canvas_object.draw_data.values()
-        new_object_id = self.create_image(
+        canvas_object.id = self.create_image(
             x,
             y,
             image=image,
             tag=tag
         )
-        self.current_objects.append(new_object_id)
-        return new_object_id
+        self.current_objects.append(canvas_object)
 
     def clear_canvas_objects(self):
         for canvas_object in self.current_objects:
-            self.delete_canvas_object(canvas_object)
+            self.delete_canvas_object(canvas_object.id)
         self.current_objects = []
 
     def delete_canvas_object(self, object_id: int) -> None:

@@ -31,10 +31,10 @@ class MapBoundCollisionLogic(AbstractLogic):
 
     def run(self, object: Coordinate2DObject,) -> bool:
         statements = [
-            object.x < self.separator,
-            object.y < self.separator,
-            object.y > self.height - self.separator,
-            object.x > self.width - self.separator
+            object.x < self.separator * 2,
+            object.y < self.separator * 2,
+            object.y > self.height - self.separator * 2,
+            object.x > self.width - self.separator * 2
         ]
         return any(statements)
 
@@ -54,7 +54,7 @@ class SpawnLogic(AbstractLogic):
                 return Coordinate2DObject(x, y)
 
     def _generate_new_position(self, max: int) -> Tuple[int, int]:
-        return randint(self.separator, max - self.separator) // self.separator * self.separator
+        return randint(self.separator * 2, max - self.separator * 2) // self.separator * self.separator
 
 
 class SnakeObjectLogic(AbstractLogic):
@@ -108,7 +108,7 @@ class SnakeGameLogic(AbstractLogic):
     def run(self, direction: str) -> bool:
         """Snake Game logic run is one whole one move in snake game."""
         self.snake.run(direction)
-        if self.bound_logic.run(self.snake.head):
+        if self.bound_logic.run(self.snake.head) or GlobalCollisionLogic().run(self.snake.head, self.snake.body_parts[1:]):
             return True
         elif CollisionLogic().run(self.snake.head, self.food_position):
             self.eat_fruit()
