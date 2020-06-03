@@ -1,5 +1,5 @@
 from typing import Tuple
-from generic import Coordinate2DObject
+from utils.generic import Coordinate2DObject
 from PIL import Image, ImageTk
 
 
@@ -25,11 +25,11 @@ class CanvasObject(Coordinate2DObject):
 
 class FoodCanvasObject(CanvasObject):
     """Represents food object in canvas map"""
-    image_src = "./assets/food.png"
+    image_src = "assets/food.png"
     tag = "food"
 
 
 class SnakeBodyCanvasObject(CanvasObject):
     """Represents body part object in canvas map"""
-    image_src = "./assets/snake.png"
+    image_src = "assets/snake.png"
     tag = "snake"

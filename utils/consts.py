@@ -1,4 +1,4 @@
-from generic import Coordinate2DObject
+from utils.generic import Coordinate2DObject
 
 WIDTH = 800
 HEIGHT = 800

@@ -1,7 +1,7 @@
 from tensorflow.keras import models
 import numpy as np
 
-model = models.load_model('snake_ai_model.h5')
+model = models.load_model('ai/snake_ai_model.h5')
 MOVING_MAPPING = {
     'a': 0,
     's': 1,
@@ -16,7 +16,7 @@ REVERSE_MOVING_MAPPING = {
 }
 
 def commit_moves(moves):
-    with open('data_snake.csv', 'a+') as file:
+    with open('ai/data_snake.csv', 'a+') as file:
         for move in moves:
             file.write(','.join(map(str, move)) + '\n')
 

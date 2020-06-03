@@ -4,7 +4,7 @@ from tensorflow.keras.utils import to_categorical
 from numpy import genfromtxt
 import numpy as np
 
-data = genfromtxt('data_snake.csv', delimiter=',', dtype=str)
+data = genfromtxt('ai/data_snake.csv', delimiter=',', dtype=str)
 features, labels = data[..., :-1], data[..., -1]
 features = features.astype("float32")
 labels = to_categorical(labels.astype("float32"))
@@ -20,4 +20,4 @@ model.add(layers.Dense(4, activation="softmax"))
 
 model.compile(optimizer="rmsprop", loss="categorical_crossentropy", metrics=["accuracy"])
 model.fit(train_features, train_label, epochs=15, batch_size=128)
-model.save('snake_ai_model.h5')
+model.save('ai/snake_ai_model.h5')

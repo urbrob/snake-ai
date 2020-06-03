@@ -1,6 +1,6 @@
 import tkinter as tk
 from typing import List
-from canvas_objects import CanvasObject, FoodCanvasObject, SnakeBodyCanvasObject
+from ui.objects import CanvasObject, FoodCanvasObject, SnakeBodyCanvasObject
 
 
 class SnakeBoardCanvas(tk.Canvas):

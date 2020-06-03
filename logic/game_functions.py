@@ -1,7 +1,14 @@
+from utils.generic import Coordinate2DObject
+from utils.consts import MOVE_SET, BANNED_CHANGE_DIRECTIONS
 from typing import List, Tuple
 from random import randint
-from generic import Coordinate2DObject
-from consts import MOVE_SET, BANNED_CHANGE_DIRECTIONS
+from enum import Enum
+
+
+class GameSignals(Enum):
+    NOTHING = 0
+    LOST = 1
+    ATE_FRUIT = 2
 
 
 class AbstractLogic:
@@ -109,10 +116,10 @@ class SnakeGameLogic(AbstractLogic):
         """Snake Game logic run is one whole one move in snake game."""
         self.snake.run(direction)
         if self.bound_logic.run(self.snake.head) or GlobalCollisionLogic().run(self.snake.head, self.snake.body_parts[1:]):
-            return True
+            return GameSignals.LOST.value
         elif CollisionLogic().run(self.snake.head, self.food_position):
-            self.eat_fruit()
-        return False
+            return GameSignals.ATE_FRUIT.value
+        return GameSignals.NOTHING.value
 
 
 class PlayerValidMovementLogic(AbstractLogic):
